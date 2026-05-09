@@ -1,0 +1,58 @@
+{
+  "name": "@webgui/react",
+  "version": "1.0.0",
+  "description": "React hooks and types for the WebGUI Minecraft mod — access window.webgui client data from any SPA.",
+  "keywords": [
+    "minecraft",
+    "webgui",
+    "react",
+    "hooks",
+    "mcef",
+    "fabric"
+  ],
+  "license": "MIT",
+  "author": "KoSHeroff",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mc-webgui/webgui-react-bridge.git"
+  },
+  "bugs": {
+    "url": "https://github.com/mc-webgui/webgui-react-bridge/issues"
+  },
+  "homepage": "https://github.com/mc-webgui/webgui-react-bridge#readme",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "sideEffects": false,
+  "engines": {
+    "node": ">=16"
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "npm run typecheck && npm run build"
+  },
+  "peerDependencies": {
+    "react": ">=18"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.0",
+    "react": "^18.3.0",
+    "tsup": "^8.0.0",
+    "typescript": "^5.4.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
