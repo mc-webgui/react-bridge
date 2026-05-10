@@ -1,5 +1,7 @@
 # @webgui/react
 
+> **Requires the [WebGUI Minecraft mod](https://modrinth.com/mod/webgui)** ([GitHub](https://github.com/mc-webgui/webgui)) to be installed on the client. This library has no effect outside of the mod.
+
 React hooks and TypeScript types for SPAs running inside the **WebGUI** Minecraft mod (free edition).
 
 WebGUI embeds a Chromium browser (via [MCEF](https://github.com/CinemaMod/mcef)) in-game and injects `window.webgui` into every page. This library wraps that API in React-idiomatic hooks built on `useSyncExternalStore` — concurrent-mode safe, no Provider required.
