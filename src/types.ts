@@ -39,7 +39,13 @@ export interface WebGUINamespace {
   client?: WebGUIClient;
   postToGame: (payload: PostToGamePayload) => void;
   closeGui: () => void;
+  /** Subscribe to a named event emitted by the server via {@code WebviewApi.emitToPage}. */
+  on: (eventName: string, handler: (data: unknown) => void) => void;
+  /** Unsubscribe a previously registered handler. */
+  off: (eventName: string, handler: (data: unknown) => void) => void;
   onClientInfo?: (client: WebGUIClient) => void;
+  /** @internal handler registry used by on/off */
+  _hs?: Record<string, Array<{ f: (data: unknown) => void; w: EventListener }>>;
 }
 
 declare global {

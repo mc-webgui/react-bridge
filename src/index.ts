@@ -19,3 +19,4 @@ export { usePostToGame }     from './hooks/usePostToGame';
 export { useWebGUISelector } from './hooks/useWebGUISelector';
 export { useCloseGui }       from './hooks/useCloseGui';
 export { useWebGUIToken }    from './hooks/useWebGUIToken';
+export { useWebGUIEvent }    from './hooks/useWebGUIEvent';
