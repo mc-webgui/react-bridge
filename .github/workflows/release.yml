@@ -1,18 +1,19 @@
 name: Release
 
 on:
-  pull_request:
-    types:
-      - closed
-    branches:
-      - main
+  push:
+    branches: [main]
+
+concurrency:
+  group: release-main
+  cancel-in-progress: true
 
 jobs:
   release:
-    if: github.event.pull_request.merged == true
+    name: Build & Publish
     runs-on: ubuntu-latest
     permissions:
-      contents: write  # create tags, releases, push commits
+      contents: write
       id-token: write  # npm provenance
 
     steps:
@@ -26,74 +27,39 @@ jobs:
           cache: npm
           registry-url: https://registry.npmjs.org
 
-      - run: npm ci
-      - run: npm run typecheck
-      - run: npm run build
-
-      # ── Determine version bump from conventional commits ──────────────────
-      - name: Determine bump type
-        id: bump
+      - name: Read version
+        id: meta
         run: |
-          LAST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
-          if [ -z "$LAST_TAG" ]; then
-            COMMITS=$(git log --pretty=format:"%s%n%b" HEAD)
+          version=$(node -p "require('./package.json').version")
+          echo "version=${version}" >> "$GITHUB_OUTPUT"
+          echo "tag=v${version}" >> "$GITHUB_OUTPUT"
+
+      - name: Skip if tag already exists
+        id: check
+        run: |
+          if git ls-remote --tags origin "refs/tags/v${{ steps.meta.outputs.version }}" | grep -q .; then
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            echo "Tag v${{ steps.meta.outputs.version }} already exists — skipping release."
           else
-            COMMITS=$(git log --pretty=format:"%s%n%b" "${LAST_TAG}..HEAD")
+            echo "skip=false" >> "$GITHUB_OUTPUT"
           fi
 
-          BUMP="patch"
-          if echo "$COMMITS" | grep -qE "(BREAKING CHANGE|^.+!:)"; then
-            BUMP="major"
-          elif echo "$COMMITS" | grep -qE "^feat(\(.+\))?:"; then
-            BUMP="minor"
-          fi
-
-          echo "bump=$BUMP" >> "$GITHUB_OUTPUT"
-          echo "Bump: $BUMP"
-
-      # ── Build changelog before touching package.json ──────────────────────
-      - name: Build changelog
-        id: changelog
+      - name: Install & build
+        if: steps.check.outputs.skip == 'false'
         run: |
-          LAST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
-          if [ -z "$LAST_TAG" ]; then
-            LOG=$(git log --pretty=format:"- %s" HEAD)
-          else
-            LOG=$(git log --pretty=format:"- %s" "${LAST_TAG}..HEAD")
-          fi
-          {
-            echo "notes<<EOF"
-            echo "$LOG"
-            echo "EOF"
-          } >> "$GITHUB_OUTPUT"
+          npm ci
+          npm run typecheck
+          npm run build
 
-      # ── Bump version in package.json, commit, tag, push ───────────────────
-      - name: Bump version and push tag
-        id: version
-        run: |
-          git config user.name  "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-
-          npm version "${{ steps.bump.outputs.bump }}" --no-git-tag-version
-          VERSION=$(node -p "require('./package.json').version")
-
-          git add package.json
-          git commit -m "chore: release v${VERSION}"
-          git tag "v${VERSION}"
-          git push origin main --follow-tags
-
-          echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
-
-      # ── GitHub release ─────────────────────────────────────────────────────
-      - name: Create GitHub release
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: v${{ steps.version.outputs.version }}
-          name: v${{ steps.version.outputs.version }}
-          body: ${{ steps.changelog.outputs.notes }}
-
-      # ── Publish to npm ────────────────────────────────────────────────────
       - name: Publish to npm
+        if: steps.check.outputs.skip == 'false'
         run: npm publish --provenance
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Create GitHub Release
+        if: steps.check.outputs.skip == 'false'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.meta.outputs.tag }}
+          name: v${{ steps.meta.outputs.version }}

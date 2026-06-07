@@ -4,6 +4,7 @@ export type {
   ServerInfo,
   WebviewMode,
   WebGUIClient,
+  WebGUIEntity,
   WebGUINamespace,
   PostToGameLog,
   PostToGameMessage,
@@ -15,6 +16,7 @@ export { isInMod, isReady } from './utils';
 
 // Hooks
 export { useWebGUIClient }   from './hooks/useWebGUIClient';
+export { useWebGUIEntity }   from './hooks/useWebGUIEntity';
 export { usePostToGame }     from './hooks/usePostToGame';
 export { useWebGUISelector } from './hooks/useWebGUISelector';
 export { useCloseGui }       from './hooks/useCloseGui';

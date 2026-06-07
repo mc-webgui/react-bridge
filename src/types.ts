@@ -35,8 +35,21 @@ export interface PostToGameMessage {
 
 export type PostToGamePayload = PostToGameLog | PostToGameMessage | string;
 
+/** The entity a player right-clicked to open the current GUI. Null when opened via command. */
+export interface WebGUIEntity {
+  /** Entity UUID */
+  uuid: string;
+  /** Namespaced entity type, e.g. "minecraft:villager" */
+  type: string;
+  /** Custom name if set, otherwise the entity type's display name */
+  name: string;
+  pos: Vec3;
+}
+
 export interface WebGUINamespace {
   client?: WebGUIClient;
+  /** Set when the GUI was opened by interacting with an entity; null otherwise. */
+  entity?: WebGUIEntity | null;
   postToGame: (payload: PostToGamePayload) => void;
   closeGui: () => void;
   /** Subscribe to a named event emitted by the server via {@code WebviewApi.emitToPage}. */
@@ -56,5 +69,6 @@ declare global {
 
   interface WindowEventMap {
     'webgui:client': CustomEvent<WebGUIClient>;
+    'webgui:entity': CustomEvent<WebGUIEntity | null>;
   }
 }
