@@ -12,6 +12,9 @@ jobs:
   release:
     name: Build & Publish
     runs-on: ubuntu-latest
+    # NPM_TOKEN lives in the 'publish' environment — the job must reference it to
+    # access that environment's secrets.
+    environment: publish
     permissions:
       contents: write
       id-token: write  # npm provenance
@@ -44,11 +47,12 @@ jobs:
             echo "skip=false" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Install & build
+      - name: Install, test & build
         if: steps.check.outputs.skip == 'false'
         run: |
           npm ci
           npm run typecheck
+          npm test
           npm run build
 
       - name: Publish to npm

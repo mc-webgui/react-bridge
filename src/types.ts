@@ -12,6 +12,16 @@ export interface ServerInfo {
 
 export type WebviewMode = 'GUI_SCREEN' | 'HUD_OVERLAY' | 'NONE';
 
+export type Gamemode = 'survival' | 'creative' | 'adventure' | 'spectator';
+
+/** Where the player is looking, in degrees. */
+export interface Look {
+  /** Rotation around the vertical axis, degrees. */
+  yaw: number;
+  /** Up/down rotation, degrees (negative = up). */
+  pitch: number;
+}
+
 export interface WebGUIClient {
   playerUuid: string;
   username: string;
@@ -19,6 +29,18 @@ export interface WebGUIClient {
   /** Namespaced dimension key, e.g. "minecraft:overworld" */
   dimension: string;
   pos: Vec3;
+  /** Head rotation (yaw/pitch), degrees. */
+  look: Look;
+  /** Current health points (0–maxHealth). */
+  health: number;
+  /** Maximum health points. */
+  maxHealth: number;
+  /** Food/hunger level (0–20). */
+  food: number;
+  /** Experience level. */
+  xpLevel: number;
+  /** Current game mode; absent if the client hasn't resolved it yet. */
+  gamemode?: Gamemode;
   server?: ServerInfo;
 }
 
