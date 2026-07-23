@@ -3,6 +3,8 @@ export type {
   Vec3,
   ServerInfo,
   WebviewMode,
+  Gamemode,
+  Look,
   WebGUIClient,
   WebGUIEntity,
   WebGUINamespace,

@@ -48,6 +48,12 @@ interface WebGUIClient {
   webviewMode: 'GUI_SCREEN' | 'HUD_OVERLAY' | 'NONE';
   dimension:   string;        // e.g. "minecraft:overworld"
   pos:         { x: number; y: number; z: number };
+  look:        { yaw: number; pitch: number };   // head rotation, degrees
+  health:      number;        // current HP (0–maxHealth)
+  maxHealth:   number;        // max HP
+  food:        number;        // hunger level (0–20)
+  xpLevel:     number;        // experience level
+  gamemode?:   'survival' | 'creative' | 'adventure' | 'spectator';
   server?: {
     address?: string;         // server address
     ping?:    number;         // ping in ms
@@ -137,6 +143,8 @@ import type {
   WebGUIClient,
   WebGUINamespace,
   WebviewMode,
+  Gamemode,
+  Look,
   PostToGamePayload,
   Vec3,
   ServerInfo,
