@@ -1,6 +1,6 @@
 {
   "name": "@webgui/react",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "description": "React hooks and types for the WebGUI Minecraft mod — access window.webgui client data from any SPA.",
   "keywords": [
     "minecraft",
