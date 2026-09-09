@@ -1,5 +1,22 @@
 # @webgui/react
 
+> **Deprecated.** Use [`@webgui/client`](https://www.npmjs.com/package/@webgui/client) instead.
+>
+> ```bash
+> npm install @webgui/client
+> ```
+>
+> ```diff
+> -import { ... } from '@webgui/react'
+> +import { ... } from '@webgui/client/react'
+> ```
+>
+> The React API is unchanged — this package now re-exports `@webgui/client/react`,
+> so nothing breaks if you stay. New events and hooks land in `@webgui/client` only.
+
+---
+
+
 > **Requires the [WebGUI Minecraft mod](https://modrinth.com/mod/webgui)** ([GitHub](https://github.com/mc-webgui/webgui)) to be installed on the client. This library has no effect outside of the mod.
 
 React hooks and TypeScript types for SPAs running inside the **WebGUI** Minecraft mod (free edition).

@@ -1,30 +1,10 @@
-// Types
-export type {
-  Vec3,
-  ServerInfo,
-  WebviewMode,
-  Gamemode,
-  Look,
-  WebGUIClient,
-  WebGUIEntity,
-  WebGUINamespace,
-  PostToGameLog,
-  PostToGameMessage,
-  PostToGamePayload,
-} from './types';
-
-// Utils
-export { isInMod, isReady } from './utils';
-
-// Commands
-export { runCommand } from './runCommand';
-
-// Hooks
-export { useWebGUIClient }   from './hooks/useWebGUIClient';
-export { useWebGUIEntity }   from './hooks/useWebGUIEntity';
-export { usePostToGame }     from './hooks/usePostToGame';
-export { useWebGUISelector } from './hooks/useWebGUISelector';
-export { useCloseGui }       from './hooks/useCloseGui';
-export { useWebGUIToken }    from './hooks/useWebGUIToken';
-export { useWebGUIEvent }    from './hooks/useWebGUIEvent';
-export { useRunCommand }     from './hooks/useRunCommand';
+/**
+ * @deprecated Use `@webgui/client/react` instead.
+ *
+ * This package is now a re-export of that one, kept so existing installs keep working.
+ * The names are identical, so migrating is a change of import path:
+ *
+ *     -import { ... } from '@webgui/react'
+ *     +import { ... } from '@webgui/client/react'
+ */
+export * from '@webgui/client/react';
