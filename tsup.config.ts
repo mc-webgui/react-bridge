@@ -7,6 +7,6 @@ export default defineConfig({
   splitting: false,
   sourcemap: true,
   clean: true,
-  external: ['react'],
+  external: ['react', '@webgui/client'],
   treeshake: true,
 });
